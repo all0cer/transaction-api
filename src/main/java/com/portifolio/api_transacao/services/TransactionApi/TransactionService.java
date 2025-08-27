@@ -34,7 +34,7 @@ public class TransactionService implements TransactionUser {
 
     @Override
     public TransactionStatistics getTransactionStatistics() {
-        return null;
+        return CalculateStatistics();
     }
 
     private TransactionStatistics CalculateStatistics(){
