@@ -1,4 +1,6 @@
 package com.portifolio.api_transacao.core.Authorization.DTO;
 
-public record RegisterRequest() {
+import com.portifolio.api_transacao.entities.user.UserRole;
+
+public record RegisterRequest(String login, String password, UserRole role) {
 }

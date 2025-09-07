@@ -1,12 +1,11 @@
 package com.portifolio.api_transacao.controller.TransactionApi;
 
-import com.portifolio.api_transacao.core.TransactionStatistics;
-import com.portifolio.api_transacao.core.TransactionsRequest;
+import com.portifolio.api_transacao.core.Transactions.TransactionStatistics;
+import com.portifolio.api_transacao.core.Transactions.TransactionsRequest;
 import com.portifolio.api_transacao.services.TransactionApi.TransactionService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.pulsar.PulsarProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +24,9 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<String> save(@RequestBody @Valid TransactionsRequest transaction) {
-            transactionService.createTransaction(transaction);
-            log.info("Transaction Sucessfully Created");
-            return ResponseEntity.status(HttpStatus.CREATED).body("Transaction Sucessfully Created");
+        transactionService.createTransaction(transaction);
+        log.info("Transaction Sucessfully Created");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Transaction Sucessfully Created");
     }
 
     @GetMapping

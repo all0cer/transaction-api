@@ -1,6 +1,4 @@
-package com.portifolio.api_transacao.core;
-
-import org.springframework.boot.autoconfigure.pulsar.PulsarProperties;
+package com.portifolio.api_transacao.core.Transactions;
 
 public interface TransactionUser {
 

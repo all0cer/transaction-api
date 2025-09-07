@@ -1,8 +1,8 @@
 package com.portifolio.api_transacao.services.TransactionApi;
 
-import com.portifolio.api_transacao.core.TransactionStatistics;
-import com.portifolio.api_transacao.core.TransactionUser;
-import com.portifolio.api_transacao.core.TransactionsRequest;
+import com.portifolio.api_transacao.core.Transactions.TransactionStatistics;
+import com.portifolio.api_transacao.core.Transactions.TransactionUser;
+import com.portifolio.api_transacao.core.Transactions.TransactionsRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -21,7 +21,6 @@ public class TransactionService implements TransactionUser {
     }
 
 
-
     @Override
     public void createTransaction(TransactionsRequest transactionsRequest) {
         transactionsList.add(transactionsRequest);
@@ -37,7 +36,7 @@ public class TransactionService implements TransactionUser {
         return CalculateStatistics();
     }
 
-    private TransactionStatistics CalculateStatistics(){
+    private TransactionStatistics CalculateStatistics() {
         OffsetDateTime oneMinuteAgo = OffsetDateTime.now().minusSeconds(60);
 
         var lastMinuteTxs = transactionsList.stream()
