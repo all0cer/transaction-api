@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,9 @@ public class AuthenticationController {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseRequest> login(@RequestBody @Valid AuthorizationRequest request) {
@@ -49,7 +53,7 @@ public class AuthenticationController {
         if (this.userRepository.findByLogin(request.login()) != null)
             return ResponseEntity.badRequest().body("Já existe um usuário cadastrado com este login");
 
-        var encriptedPassword = new BCryptPasswordEncoder().encode(request.password());
+        var encriptedPassword = passwordEncoder.encode(request.password());
         User newUser = new User(request.login(), encriptedPassword, request.role());
 
         this.userRepository.save(newUser);

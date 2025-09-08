@@ -1,5 +1,6 @@
 package com.portifolio.api_transacao.infra.security;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.portifolio.api_transacao.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -28,10 +30,17 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             var login = tokenService.validateToken(token);
-            UserDetails user = userRepository.findByLogin(login);
+            login.ifPresent(loginvalue -> {
+                System.out.println(loginvalue);
+                UserDetails user = userRepository.findByLogin(loginvalue);
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                if(user!=null && user.isEnabled()){
+                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            });
+
+
         }
         filterChain.doFilter(request, response);
 
@@ -42,6 +51,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (authHeader == null) {
             return null;
         }
-        return authHeader.replace("Bearer ", "");
+        if(!authHeader.startsWith("Bearer ")) { return null; }
+        return authHeader.substring(7).trim();
     }
 }
