@@ -1,7 +1,7 @@
 package com.portifolio.api_transacao.controller.TransactionApi;
 
 import com.portifolio.api_transacao.core.Transactions.TransactionStatistics;
-import com.portifolio.api_transacao.core.Transactions.TransactionsRequest;
+import com.portifolio.api_transacao.core.Transactions.TransactionDTO.TransactionsRequest;
 import com.portifolio.api_transacao.services.TransactionApi.TransactionService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;

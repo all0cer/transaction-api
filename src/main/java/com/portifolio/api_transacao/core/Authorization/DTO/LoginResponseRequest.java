@@ -1,5 +1,10 @@
 package com.portifolio.api_transacao.core.Authorization.DTO;
 
-public record LoginResponseRequest(String token) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record LoginResponseRequest(
+        @NotBlank @NotNull
+        String token) {
 
 }

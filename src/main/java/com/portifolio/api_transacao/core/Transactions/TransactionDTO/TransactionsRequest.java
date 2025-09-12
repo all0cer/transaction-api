@@ -1,4 +1,4 @@
-package com.portifolio.api_transacao.core.Transactions;
+package com.portifolio.api_transacao.core.Transactions.TransactionDTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotNull;

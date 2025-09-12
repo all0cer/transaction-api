@@ -2,7 +2,7 @@ package com.portifolio.api_transacao.services.TransactionApi;
 
 import com.portifolio.api_transacao.core.Transactions.TransactionStatistics;
 import com.portifolio.api_transacao.core.Transactions.TransactionUser;
-import com.portifolio.api_transacao.core.Transactions.TransactionsRequest;
+import com.portifolio.api_transacao.core.Transactions.TransactionDTO.TransactionsRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
