@@ -121,7 +121,7 @@ class AuthenticationControllerTest {
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(authenticationManager, times(1)).authenticate(any());
         verify(tokenService, never()).generateToken(any());
