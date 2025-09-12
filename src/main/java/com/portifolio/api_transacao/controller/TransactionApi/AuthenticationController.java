@@ -7,12 +7,17 @@ import com.portifolio.api_transacao.core.Authorization.DTO.RegisterRequest;
 import com.portifolio.api_transacao.entities.user.User;
 import com.portifolio.api_transacao.infra.security.TokenService;
 import com.portifolio.api_transacao.repositories.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication", description = "Login and registration endpoint")
 public class AuthenticationController {
 
     @Autowired
@@ -35,6 +41,16 @@ public class AuthenticationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+
+    @Operation(summary = "Login", description = "Authenticates a user and return a token JWT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login bem-sucedido",
+                    content = @Content(schema = @Schema(implementation = LoginResponseRequest.class))),
+            @ApiResponse(responseCode = "401", description = "Credenciais inválidas"),
+            @ApiResponse(responseCode = "422", description = "Validação do request falhou")
+    })
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponseRequest> login(@RequestBody @Valid AuthorizationRequest request) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(request.login(), request.password());
@@ -46,6 +62,14 @@ public class AuthenticationController {
 
     }
 
+
+    @Operation(summary = "Register user", description = "Register a new user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Login já existe"),
+            @ApiResponse(responseCode = "422", description = "Validação do request falhou"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest request) {
