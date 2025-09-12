@@ -4,16 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.portifolio.api_transacao.core.Authorization.DTO.AuthorizationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest
 class RateLimitTest {
 
     @Autowired
@@ -24,9 +22,8 @@ class RateLimitTest {
 
     @Test
     void deveRetornarTooManyRequests_AposUltrapassarLimite() throws Exception {
-        var request = new AuthorizationRequest("user", "pass"); // supondo que você tenha esse DTO
+        var request = new AuthorizationRequest("user", "pass");
 
-        // Consome o limite permitido (exemplo: 100 req/min no RateLimitFilter)
         for (int i = 0; i < 100; i++) {
             mockMvc.perform(post("/auth/login")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -34,7 +31,6 @@ class RateLimitTest {
                     .andExpect(status().is4xxClientError());
         }
 
-        // 101ª requisição deve estourar o limite → 429 Too Many Requests
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
