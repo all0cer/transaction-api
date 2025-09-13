@@ -6,11 +6,6 @@ on:
       - main
   pull_request:
 
-env:
-  SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/${{ secrets.POSTGRES_DB }}
-  SPRING_DATASOURCE_USERNAME: ${{ secrets.POSTGRES_USER }}
-  SPRING_DATASOURCE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -18,13 +13,13 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: transaction
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U ${{ secrets.POSTGRES_USER }}" 
+          --health-cmd "pg_isready -U postgres" 
           --health-interval 10s 
           --health-timeout 5s 
           --health-retries 5
@@ -40,6 +35,10 @@ jobs:
           distribution: temurin
 
       - name: Build and test with Maven
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/transaction
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
         run: mvn clean verify
 
       - name: Log in to DockerHub
